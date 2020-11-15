@@ -4,22 +4,23 @@ import { Repository } from 'typeorm';
 import { Todo } from "./todo.entity";
 import { UpdateTodoDto } from "./todo.dto";
 import { TodoSettings } from "../todoSettings/todoSettings.entity";
+import { TodoRepository } from "./todo.repository";
 
 @Injectable()
 export class TodoService {
   constructor(
-    @InjectRepository(Todo)
-    private todoRepository: Repository<Todo>,
+    private todoRepository: TodoRepository,
     @InjectRepository(TodoSettings)
     private todoSettingsRepository: Repository<TodoSettings>,
-  ) {}
+  ) {
+  }
 
   findAll(): Promise<Todo[]> {
     return this.todoRepository.find();
   }
 
   findOne(id: string): Promise<Todo> {
-    return this.todoRepository.findOne(id ,{relations: ["settings"]});
+    return this.todoRepository.findById(id);
   }
 
   async create(todo: Todo): Promise<Todo> {
